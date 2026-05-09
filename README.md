@@ -63,7 +63,7 @@ Por design, este app **monitora globalmente o teclado** quando ativado e **envia
 ### Privacidade
 
 - **O texto identificado como pt-BR (≥ 4 chars, ≥ 2 palavras) é enviado para a API pública MyMemory** (`api.mymemory.translated.net`) por HTTPS. A MyMemory pode logar requisições e usar os textos para melhorar seu sistema. Ver [Termos de Uso da MyMemory](https://mymemory.translated.net/doc/usagelimits.php).
-- **O log local** (`~/Library/Logs/PraticEnglish.log`) é texto plano, sem criptografia. Por padrão guarda só metadados; se você ligar o modo verboso, o conteúdo aparece. Use as opções de limpeza no menu para zerá-lo.
+- **O log local** (`~/Library/Logs/PraticEnglish.log`) é texto plano, sem criptografia, criado com permissões `0600` (somente o seu usuário lê — protege contra outras contas e backups que respeitam permissão POSIX, mas **não** contra outros processos rodando na sua mesma sessão de usuário). Por padrão guarda só metadados; se você ligar o modo verboso, o conteúdo aparece. Use as opções de limpeza no menu para zerá-lo.
 
 ### Captura de senhas
 
@@ -212,27 +212,39 @@ Clique no ícone **EN** na barra de menu:
 
 ### Bundle ID
 
-Antes de publicar/distribuir o app, atualize o `CFBundleIdentifier` em [`App/Info.plist`](App/Info.plist) para algo único, no formato:
+O `CFBundleIdentifier` é o **identificador único do app** no macOS. Funciona como um "CPF" do app — o sistema usa pra:
 
-```
-io.github.<seu-usuario>.PraticEnglish
-```
+| Onde | Para quê |
+|------|----------|
+| **Permissões de privacidade** | Acessibilidade, Input Monitoring e outras permissões de TCC são rastreadas por Bundle ID. |
+| **`UserDefaults`** | Cada app tem seu próprio namespace (`defaults read <bundle-id>`). |
+| **Notarização e App Store** | A Apple exige unicidade global. |
+| **Launch Services** | Decide qual app abre cada arquivo/URL. |
+| **Crash reports / logs do sistema** | A Apple agrupa relatórios pelo Bundle ID. |
 
-ou um domínio reverso seu. O valor padrão `io.github.PraticEnglish` é genérico.
+**Convenção universal**: notação DNS reversa.
+
+- Sem domínio próprio: `io.github.<seu-usuario>.PraticEnglish`
+- Com domínio próprio: `com.seudominio.PraticEnglish`
+
+O valor atual em [`App/Info.plist`](App/Info.plist) é `io.github.wenderson-oscar.PraticEnglish`. Se você fizer fork, troque para o seu identificador antes de compilar.
+
+> ⚠️ **Atenção ao trocar o Bundle ID de um app já em uso**: o macOS rastreia permissões e dados em `UserDefaults` pelo Bundle ID. Trocar invalida tudo isso — você precisará:
+> - Remover o app antigo das listas em **Ajustes do Sistema → Privacidade e Segurança → Acessibilidade** e **Monitoramento de Entrada**
+> - Adicionar o app novo nessas mesmas listas após o primeiro launch
+> - Reconfigurar preferências (estado "Ativado", "Limpar log ao iniciar", etc.)
 
 ### Logging detalhado
 
-Por padrão, o conteúdo do texto digitado **não é gravado** no log — só metadados (contagem de palavras/caracteres). Para depuração local, ligue o modo verboso:
+Por padrão, o conteúdo do texto digitado **não é gravado** no log — só metadados (contagem de palavras/caracteres). Para depuração local, defina a variável de ambiente `PRATICENGLISH_VERBOSE=1` **antes de lançar o app**:
 
 ```bash
-defaults write io.github.PraticEnglish PraticEnglish.verboseLogging -bool YES
+PRATICENGLISH_VERBOSE=1 PraticEnglish.app/Contents/MacOS/PraticEnglish
 ```
 
-(use o Bundle ID que você configurou). Para desligar:
+A variável é lida uma única vez na inicialização e congelada para o resto da sessão. Para desligar, encerre o app e relance sem a variável.
 
-```bash
-defaults delete io.github.PraticEnglish PraticEnglish.verboseLogging
-```
+> **Por que ENV var em vez de `defaults write`?** `defaults` é silencioso e qualquer processo na sua sessão de usuário pode flipar a flag por trás, sem deixar traço. Exigir variável de ambiente no launch torna ligar verbose logging uma ação deliberada por sessão — outro processo na máquina não consegue habilitar sem reiniciar o app com ENV controlada.
 
 ### Limpar log
 
