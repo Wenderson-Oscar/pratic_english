@@ -12,6 +12,7 @@
   <img src="https://img.shields.io/badge/macOS-13.0%2B-blue" alt="macOS 13.0+">
   <img src="https://img.shields.io/badge/Swift-5.9%2B-orange" alt="Swift 5.9+">
   <img src="https://img.shields.io/badge/status-experimental-yellow" alt="experimental">
+  <img src="https://img.shields.io/badge/license-MIT-green" alt="MIT License">
 </p>
 
 ---
@@ -305,7 +306,7 @@ Isso atualiza `App/Icon.icns` e `assets/icon.png`.
 
 ## Licença
 
-> ⚠️ Nenhuma licença foi adicionada ainda. Sem `LICENSE`, o código é "all rights reserved" por padrão e ninguém pode legalmente reutilizar. Antes de publicar, escolha uma licença (recomendado: [MIT](https://choosealicense.com/licenses/mit/) ou [Apache-2.0](https://choosealicense.com/licenses/apache-2.0/)) e crie um arquivo `LICENSE` na raiz.
+Distribuído sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
 ## Disclaimer
 
