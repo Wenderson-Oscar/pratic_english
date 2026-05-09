@@ -228,7 +228,7 @@ O `CFBundleIdentifier` é o **identificador único do app** no macOS. Funciona c
 - Sem domínio próprio: `io.github.<seu-usuario>.PraticEnglish`
 - Com domínio próprio: `com.seudominio.PraticEnglish`
 
-O valor atual em [`App/Info.plist`](App/Info.plist) é `io.github.wenderson-oscar.PraticEnglish`. Se você fizer fork, troque para o seu identificador antes de compilar.
+O valor atual em [`App/Info.plist`](App/Info.plist) é `io.github.PraticEnglish`. Se você fizer fork, troque para o seu identificador antes de compilar.
 
 > ⚠️ **Atenção ao trocar o Bundle ID de um app já em uso**: o macOS rastreia permissões e dados em `UserDefaults` pelo Bundle ID. Trocar invalida tudo isso — você precisará:
 > - Remover o app antigo das listas em **Ajustes do Sistema → Privacidade e Segurança → Acessibilidade** e **Monitoramento de Entrada**
