@@ -1,0 +1,40 @@
+# Build artifacts
+.build/
+.swiftpm/
+*.xcodeproj/
+*.xcworkspace/
+DerivedData/
+build/
+
+# Generated app bundle
+PraticEnglish.app/
+*.app/
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon?
+._*
+
+# Logs
+*.log
+
+# Swift Package Manager
+Package.resolved
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Local env
+.env
+.env.local
+
+# Coverage
+*.gcda
+*.gcno
+*.profraw
+*.profdata
